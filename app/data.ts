@@ -22,9 +22,6 @@ export type ContactRecord = ContactMutation & {
   createdAt: string;
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// This is just a fake DB table. In a real app you'd be talking to a real db or
-// fetching from an existing API.
 const fakeContacts = {
   records: {} as Record<string, ContactRecord>,
 
