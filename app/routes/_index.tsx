@@ -1,12 +1,11 @@
 import { Link } from "@remix-run/react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, RocketIcon, ZapIcon, LineChartIcon } from "lucide-react";
 
 export default function LandingPage() {
   return (
     <main className="bg-background text-foreground min-h-screen w-full">
-      {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 py-24 flex flex-col items-center text-center">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
@@ -40,7 +39,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Features Section */}
       <section className="bg-card py-20 border-t">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-12">
@@ -67,7 +65,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Call to Action */}
       <section className="py-20 px-6 bg-gradient-to-r from-primary to-secondary text-white">
         <div className="max-w-4xl mx-auto text-center">
           <motion.h2
@@ -118,5 +115,3 @@ const features = [
     icon: <LineChartIcon className="w-6 h-6" />,
   },
 ];
-
-import { RocketIcon, ZapIcon, LineChartIcon } from "lucide-react";

@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String   @id @default(cuid())
+  email            String   @unique
+  name             String?
+  googleAccessToken String?
+  googleRefreshToken String?
+  googleCustomerId String?
+
+  campaigns        Campaign[]
+  createdAt        DateTime @default(now())
+}
+
+model Campaign {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
+  name             String
+  description      String
+  image            String?
+  headline         String
+  adDescription    String
+  audience         String
+  objective        String
+  budgetSuggestion String
+  callToAction     String
+  keywords         String
+  status           String   @default("DRAFT")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+

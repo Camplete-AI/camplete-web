@@ -13,8 +13,10 @@ export default function MainLayout({
         <AppSidebar />
         <div className="flex flex-col flex-1">
           <BaseLayout>
-            <SidebarTrigger />
-            <div className="flex-1 p-14">{children}</div>
+            <div className="p-4">
+              <SidebarTrigger />
+              <div className="flex-1 p-4">{children}</div>
+            </div>
           </BaseLayout>
         </div>
       </div>
