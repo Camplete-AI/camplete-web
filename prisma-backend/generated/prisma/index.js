@@ -156,6 +156,8 @@ const config = {
       "fromEnvVar": null
     },
     "config": {
+      "jsTarget": "es2022",
+      "emitDts": "true",
       "engineType": "library"
     },
     "binaryTargets": [
@@ -189,8 +191,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id                 String  @id @default(cuid())\n  email              String  @unique\n  name               String?\n  googleAccessToken  String?\n  googleRefreshToken String?\n  googleCustomerId   String?\n\n  campaigns Campaign[]\n  createdAt DateTime   @default(now())\n}\n\nmodel Campaign {\n  id               String   @id @default(cuid())\n  userId           String\n  user             User     @relation(fields: [userId], references: [id])\n  name             String\n  description      String\n  image            String?\n  headline         String\n  adDescription    String\n  audience         String\n  objective        String\n  budgetSuggestion String\n  callToAction     String\n  keywords         String\n  status           String   @default(\"DRAFT\")\n  createdAt        DateTime @default(now())\n  updatedAt        DateTime @updatedAt\n}\n",
-  "inlineSchemaHash": "9bc905f5bf545fdcec3736020fab4604c1bc393b07e9cccf05ee548ed9b5d7e8",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n  jsTarget = \"es2022\"\n  emitDts  = true\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id                 String  @id @default(cuid())\n  email              String  @unique\n  name               String?\n  googleAccessToken  String?\n  googleRefreshToken String?\n  googleCustomerId   String?\n\n  campaigns Campaign[]\n  createdAt DateTime   @default(now())\n}\n\nmodel Campaign {\n  id               String   @id @default(cuid())\n  userId           String\n  user             User     @relation(fields: [userId], references: [id])\n  name             String\n  description      String\n  image            String?\n  headline         String\n  adDescription    String\n  audience         String\n  objective        String\n  budgetSuggestion String\n  callToAction     String\n  keywords         String\n  status           String   @default(\"DRAFT\")\n  createdAt        DateTime @default(now())\n  updatedAt        DateTime @updatedAt\n}\n",
+  "inlineSchemaHash": "ab02b1c9307aac83ef8273284ec5e81132bd64cbc0933fd016d6b331ccd1ade4",
   "copyEngine": true
 }
 

@@ -1,6 +1,7 @@
 import { google } from "googleapis";
-import { getGoogleAuthClient } from "./auth";
+
 import { prisma } from "prisma-backend/app/lib/prisma";
+import { getGoogleAuthClient } from "./auth";
 
 export async function getGoogleMetrics(campaignId: string) {
     const campaign = await prisma.campaign.findUnique({
@@ -12,9 +13,12 @@ export async function getGoogleMetrics(campaignId: string) {
         throw new Error("Dados insuficientes para buscar métricas");
     }
 
-    const auth = await getGoogleAuthClient(campaign.user.googleAccessToken);
+    if (!campaign.user.googleAccessToken) {
+        throw new Error("Google access token is missing");
+    }
+    const auth = getGoogleAuthClient(campaign.user.googleAccessToken);
 
-    const ads = google.ads({ version: "v16", auth });
+    const ads = new google.ads.googleads.v16.GoogleAdsClient({ auth });
 
     const response = await ads.customers.search({
         customerId: campaign.user.googleCustomerId,

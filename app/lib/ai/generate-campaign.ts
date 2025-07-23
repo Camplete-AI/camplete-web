@@ -46,12 +46,13 @@ export async function generateCampaign(inputs: {
 }
 
 
-function extractJSON(text: string | null): any {
+function extractJSON(text: string | null) {
     try {
         const match = text?.match(/\{[\s\S]*\}/);
         if (!match) throw new Error("No JSON found");
         return JSON.parse(match[0]);
     } catch (e) {
-        throw new Error("Failed to parse AI response");
+        console.error("Error parsing AI response:", e);
+        throw new Error("Failed to parse AI response: " + (e instanceof Error ? e.message : String(e)));
     }
 }
