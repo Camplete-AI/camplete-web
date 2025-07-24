@@ -1,10 +1,25 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { getAuth } from "@clerk/remix/ssr.server";
 import { prisma } from "prisma-backend/app/lib/prisma";
-import { GoogleAdsApi, fields } from "google-ads-api";
 
+async function getMccAccessToken() {
+    const res = await fetch("https://oauth2.googleapis.com/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+            client_id: process.env.GOOGLE_CLIENT_ID!,
+            client_secret: process.env.GOOGLE_CLIENT_SECRET!,
+            refresh_token: process.env.MCC_REFRESH_TOKEN!,
+            grant_type: "refresh_token",
+        }),
+    });
 
-const IS_DEV = process.env.NODE_ENV === "development";
+    const json = await res.json();
+    if (!res.ok) {
+        throw new Error(`Failed to get MCC access_token: ${res.status} - ${JSON.stringify(json)}`);
+    }
+    return json.access_token as string;
+}
 
 export async function loader(args: LoaderFunctionArgs) {
     const url = new URL(args.request.url);
@@ -14,6 +29,7 @@ export async function loader(args: LoaderFunctionArgs) {
     if (!userId) throw new Error("User not authenticated");
     if (!code) throw new Error("Missing Google code");
 
+    // Troca o code do usuário por access/refresh tokens
     const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -27,72 +43,53 @@ export async function loader(args: LoaderFunctionArgs) {
     });
 
     const tokenData = await tokenRes.json();
-    const accessToken = tokenData.access_token;
-    const refreshToken = tokenData.refresh_token;
+    const userAccessToken = tokenData.access_token;
+    const userRefreshToken = tokenData.refresh_token;
 
-    if (IS_DEV) {
-        const googleAdsClient = new GoogleAdsApi({
-            client_id: process.env.GOOGLE_CLIENT_ID!,
-            client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-            developer_token: process.env.GOOGLE_DEVELOPER_TOKEN!,
-        });
+    // Access token do MCC (para criar a subconta)
+    const managerId = process.env.SANDBOX_MANAGER_ID?.replace(/-/g, "");
+    if (!managerId) throw new Error("Missing SANDBOX_MANAGER_ID");
+    const mccAccessToken = await getMccAccessToken();
 
-        const mccCustomer = googleAdsClient.Customer({
-            customer_id: process.env.SANDBOX_MANAGER_ID!,
-            refresh_token: refreshToken,
-        });
-
-
-        const operations = [
-            {
-                resource: {
-                    resource_name: "customers/-",
-                    descriptive_name: `Test Client ${Date.now()}`,
-                    currency_code: "USD",
-                    time_zone: "America/New_York",
+    const createResponse = await fetch(
+        `https://googleads.googleapis.com/v18/customers/${managerId}:createCustomerClient`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "developer-token": process.env.GOOGLE_DEVELOPER_TOKEN!,
+                "login-customer-id": managerId,
+                Authorization: `Bearer ${mccAccessToken}`,
+            },
+            body: JSON.stringify({
+                customerClient: {
+                    descriptiveName: `Client ${Date.now()}`,
+                    currencyCode: "USD",
+                    timeZone: "America/New_York",
                 },
-                entity: "customer" as fields.Resource,
-                operation: "create" as const,
-            },
-        ];
+            }),
+        }
+    );
 
-        const response = await mccCustomer.mutateResources(operations);
-
-
-        const customerResult = response.mutate_operation_responses?.[0]?.customer_result;
-        const newCustomerId = customerResult?.resource_name?.split("/")[1];
-
-
-        await prisma.user.update({
-            where: { id: userId },
-            data: {
-                googleAccessToken: accessToken,
-                googleRefreshToken: refreshToken,
-                googleCustomerId: newCustomerId,
-            },
-        });
-
-        return redirect("/dashboard");
+    if (!createResponse.ok) {
+        const errorText = await createResponse.text();
+        throw new Error(`Failed to create customer: ${createResponse.status} - ${errorText}`);
     }
 
-    // produção normal (pega conta real do usuário)
-    const googleAdsClient = new GoogleAdsApi({
-        client_id: process.env.GOOGLE_CLIENT_ID!,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-        developer_token: process.env.GOOGLE_DEVELOPER_TOKEN!,
-    });
+    const createData = await createResponse.json();
+    const resourceName = createData.resourceName;
+    const newCustomerId = resourceName?.split("/")[1];
+    if (!newCustomerId) {
+        throw new Error("Could not extract customer ID from response");
+    }
 
-    const accessible = await googleAdsClient.listAccessibleCustomers(accessToken);
-    const realCustomerId = accessible?.resource_names?.[0]?.split("/")[1] ?? null;
-
-    if (!realCustomerId) return redirect("/no-ads-account");
-
+    // Salva dados no banco (tokens do user + customerId que você gerou no seu MCC)
     await prisma.user.update({
         where: { id: userId },
         data: {
-            googleAccessToken: accessToken,
-            googleRefreshToken: refreshToken,
-            googleCustomerId: realCustomerId,
+            googleAccessToken: userAccessToken,
+            googleRefreshToken: userRefreshToken,
+            googleCustomerId: newCustomerId,
         },
     });
 
