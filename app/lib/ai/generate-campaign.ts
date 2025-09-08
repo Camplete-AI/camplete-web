@@ -1,39 +1,38 @@
 import { openai } from "@/services/openai";
 
-
 export async function generateCampaign(inputs: {
     name: string;
     description: string;
 }) {
-
     const prompt = `
-    Você é um especialista sênior em marketing digital com ampla experiência em campanhas do Google Ads, especialmente no formato Performance Max.
-    
-    Seu objetivo é gerar uma campanha publicitária eficaz com base nas seguintes informações do produto:
-    
-    - Nome do produto/serviço: "${inputs.name}"
-    - Descrição detalhada: "${inputs.description}"
-    
-    Com base nessas informações, crie um plano de campanha ideal no formato JSON, contendo os seguintes campos:
-    
-    {
-      "headline": "Título principal curto e impactante (máximo 30 caracteres)",
-      "description": "Descrição persuasiva do produto (máximo 90 caracteres)",
-      "targetAudience": "Resumo do público-alvo ideal (ex: jovens empreendedores, mães que trabalham, etc.)",
-      "objective": "Objetivo principal da campanha (ex: gerar leads, aumentar vendas, reconhecimento de marca)",
-      "budgetSuggestion": "Sugestão de orçamento diário em dólares (formato numérico ou string como '$20/dia')",
-      "callToAction": "Chamada para ação recomendada (ex: Compre agora, Saiba mais, Cadastre-se)",
-      "suggestedKeywords": ["Palavra-chave 1", "Palavra-chave 2", "Palavra-chave 3"]
-    }
-    
-    Regras:
-    - Responda apenas com o JSON.
-    - Não inclua explicações antes ou depois do JSON.
-    - Certifique-se de que os campos estejam claros, bem escritos e ajustados ao perfil do produto.
-    
-    Capriche na linguagem e use tom publicitário de alta conversão.
-    `;
+Você é um especialista em Google Ads com foco em campanhas Performance Max.
 
+Com base nas seguintes informações:
+- Nome do produto: "${inputs.name}"
+- Descrição: "${inputs.description}"
+
+Gere um JSON com os seguintes campos:
+{
+  "headline": "Título principal curto e impactante (máx. 30 caracteres)",
+  "longHeadline": "Versão longa do título (máx. 90 caracteres)",
+  "description": "Descrição persuasiva (máx. 90 caracteres)",
+  "businessName": "Nome da empresa ou marca",
+  "targetAudience": "Público-alvo ideal",
+  "objective": "Objetivo principal da campanha",
+  "budgetSuggestion": "Sugestão de orçamento diário (ex: $20/dia)",
+  "callToAction": "Chamada para ação (ex: Compre agora)",
+  "suggestedKeywords": ["Palavra-chave 1", "Palavra-chave 2"],
+  "conversionCategory": "Categoria de conversão (ex: PURCHASE)",
+  "conversionValue": "Valor médio por conversão (ex: 50.0)",
+  "imageUrl": "URL de imagem para o criativo (de preferência 1200x628)",
+  "youtubeVideoUrl": "Link para vídeo no YouTube (opcional, pode ser real ou fictício)"
+}
+
+Regras:
+- Responda apenas com o JSON.
+- Não inclua texto antes ou depois.
+- Capriche nos textos com tom publicitário e de alta conversão.
+`;
 
     const completion = await openai.chat.completions.create({
         messages: [{ role: "user", content: prompt }],
@@ -44,7 +43,6 @@ export async function generateCampaign(inputs: {
     const json = extractJSON(completion.choices[0].message.content);
     return json;
 }
-
 
 function extractJSON(text: string | null) {
     try {

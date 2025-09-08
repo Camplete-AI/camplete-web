@@ -45,6 +45,17 @@ export default function PreviewCampaignPage() {
         <p>
           <strong>Keywords:</strong> {campaign.keywords}
         </p>
+        {campaign.conversionCategory && (
+          <p>
+            <strong>Conversion Category:</strong> {campaign.conversionCategory}
+          </p>
+        )}
+        {campaign.conversionValue && (
+          <p>
+            <strong>Conversion Value:</strong> R${" "}
+            {campaign.conversionValue.toFixed(2)}
+          </p>
+        )}
         {campaign.image && (
           <img
             src={campaign.image}

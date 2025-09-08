@@ -8,6 +8,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Expondo tokens (mapeiam para as vars de baixo) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -26,86 +28,189 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Charts: mapeados direto da paleta da imagem */
+  --color-chart-1: var(--peach-300);
+  --color-chart-2: var(--peach-400);
+  --color-chart-3: var(--sunset-500);
+  --color-chart-4: var(--berry-600);
+  --color-chart-5: var(--plum-800);
+
+  /* Sidebar (se você usar shadcn/sidebar) */
+  --color-sidebar: var(--card);
+  --color-sidebar-foreground: var(--card-foreground);
+  --color-sidebar-primary: var(--primary);
+  --color-sidebar-primary-foreground: var(--primary-foreground);
+  --color-sidebar-accent: var(--accent);
+  --color-sidebar-accent-foreground: var(--accent-foreground);
+  --color-sidebar-border: var(--border);
+  --color-sidebar-ring: var(--ring);
 }
+
+/* ===== Paleta base (da imagem) =====
+  peach-300: #FFD08E
+  peach-400: #FFA874
+  peach-500: #FA7C5A
+  sunset-500: #E3534C
+  berry-600: #A8234C
+  plum-800: #681740
+*/
 
 :root {
   --radius: 0.625rem;
 
-  /* Light Theme */
-  --background: #ffffff;
-  --foreground: #111827;
+  /* helpers da paleta */
+  --peach-300: #ffd08e;
+  --peach-400: #ffa874;
+  --peach-500: #fa7c5a;
+  --sunset-500: #e3534c;
+  --berry-600: #a8234c;
+  --plum-800: #681740;
 
-  --card: #f9fafb;
-  --card-foreground: #111827;
+  /* ===== Light Theme ===== */
+  --background: #fffdfb; /* levemente quente para casar com a paleta */
+  --foreground: #241314; /* marrom-vinho bem escuro para ótimo contraste */
+
+  --card: #fff7f1;
+  --card-foreground: #241314;
 
   --popover: #ffffff;
-  --popover-foreground: #111827;
+  --popover-foreground: #241314;
 
-  --primary: #6366f1; /* Indigo 500 */
+  /* CTA principal: sunset-500 */
+  --primary: var(--sunset-500); /* #E3534C */
   --primary-foreground: #ffffff;
 
-  --secondary: #e0e7ff; /* Indigo 100 */
-  --secondary-foreground: #3730a3; /* Indigo 700 */
+  /* Secundária: pílulas/badges suaves (peach-300) */
+  --secondary: color-mix(in oklab, var(--peach-300) 55%, white);
+  --secondary-foreground: #3a0f1e;
 
-  --muted: #f3f4f6; /* Gray 100 */
-  --muted-foreground: #6b7280;
+  /* Muted: superfícies neutras quentes */
+  --muted: #fff1e6;
+  --muted-foreground: #7a585c;
 
-  --accent: #fde68a; /* Yellow 200 */
-  --accent-foreground: #111827;
+  /* Accent: destaque claro (peach-300) */
+  --accent: var(--peach-300);
+  --accent-foreground: #3a0f1e;
 
-  --destructive: #ef4444;
-  --border: #e5e7eb;
-  --input: #d1d5db;
-  --ring: #6366f1;
+  --destructive: #dc2626;
+
+  /* Bordas/inputs com leve calor */
+  --border: #f0ddd6;
+  --input: #e9cfc6;
+  --ring: var(--sunset-500);
 }
 
 .dark {
-  /* Dark Theme */
-  --background: #0f172a;
-  --foreground: #f8fafc;
+  /* ===== Dark Theme (plum/berry) ===== */
+  --background: #160912; /* quase ameixa */
+  --foreground: #fff2ec; /* off-white quente */
 
-  --card: #1e293b;
-  --card-foreground: #f8fafc;
+  --card: #1e0f18; /* +claro que bg para profundidade */
+  --card-foreground: #fff2ec;
 
-  --popover: #1e293b;
-  --popover-foreground: #f8fafc;
+  --popover: #1e0f18;
+  --popover-foreground: #fff2ec;
 
-  --primary: #8b5cf6; /* Violet 500 */
-  --primary-foreground: #ffffff;
+  /* CTA em dark: peach-500 para brilhar sobre o plum */
+  --primary: var(--peach-500); /* #FA7C5A */
+  --primary-foreground: #1a0c13;
 
-  --secondary: #3730a3;
-  --secondary-foreground: #e0e7ff;
+  /* Secundária: berry-600 sutil */
+  --secondary: color-mix(in oklab, var(--berry-600) 45%, black);
+  --secondary-foreground: #ffe9e2;
 
-  --muted: #334155;
-  --muted-foreground: #94a3b8;
+  --muted: #2a1320;
+  --muted-foreground: #d9b9b9;
 
-  --accent: #facc15; /* Yellow 400 */
-  --accent-foreground: #0f172a;
+  --accent: var(--peach-400);
+  --accent-foreground: #250a16;
 
   --destructive: #f87171;
-  --border: #475569;
-  --input: #475569;
-  --ring: #8b5cf6;
+
+  --border: #3b1a2d;
+  --input: #3b1a2d;
+  --ring: var(--peach-500);
+
+  /* manter helpers da paleta também no dark (por segurança) */
+  --peach-300: #ffd08e;
+  --peach-400: #ffa874;
+  --peach-500: #fa7c5a;
+  --sunset-500: #e3534c;
+  --berry-600: #a8234c;
+  --plum-800: #681740;
 }
 
+/* Base */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  .font-jomhuria {
+    font-family: "Jomhuria", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+}
+
+/* ===== Utilities para GRADIENTS (fazem seus classes funcionarem) ===== */
+@layer utilities {
+  /* Fundo suave do herói – claro e escuro */
+  .bg-gradient-hero {
+    background-image: radial-gradient(
+        1200px 600px at 20% 10%,
+        color-mix(in oklab, var(--peach-300) 35%, white) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        900px 500px at 85% 80%,
+        color-mix(in oklab, var(--peach-500) 18%, white) 0%,
+        transparent 65%
+      ),
+      linear-gradient(180deg, #fffdfb 0%, #fff4ea 55%, #ffe6cf 100%);
+  }
+  .dark .bg-gradient-hero {
+    background-image: radial-gradient(
+        1200px 600px at 20% 10%,
+        color-mix(in oklab, var(--berry-600) 38%, transparent) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        900px 500px at 85% 80%,
+        color-mix(in oklab, var(--plum-800) 60%, transparent) 0%,
+        transparent 65%
+      ),
+      linear-gradient(180deg, #160912 0%, #1b0c15 50%, #210f1b 100%);
+  }
+
+  /* Texto com gradiente “sunset” (para .bg-clip-text + text-transparent) */
+  .bg-gradient-sunset {
+    background-image: linear-gradient(
+      90deg,
+      var(--peach-400) 0%,
+      var(--sunset-500) 50%,
+      var(--berry-600) 100%
+    );
+  }
+}
+
+/* (opcional) micro realces bonitos pro hover do CTA já existente */
+@layer utilities {
+  .glow-on-hover {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+  .glow-on-hover:hover {
+    box-shadow: 0 10px 30px -6px color-mix(in oklab, var(--primary) 45%, transparent);
+    transform: translateY(-1px);
+  }
+
+  .shadow-elegant {
+    box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.35),
+      0 2px 8px -4px rgba(0, 0, 0, 0.25);
   }
 }

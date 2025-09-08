@@ -18,49 +18,60 @@ export const links: LinksFunction = () => [
     type: "image/svg",
   },
   { rel: "stylesheet", href: styles },
-];
 
+  // 👉 adiciona aqui:
+  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  {
+    rel: "preconnect",
+    href: "https://fonts.gstatic.com",
+    crossOrigin: "anonymous",
+  },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Jomhuria&display=swap",
+  },
+];
 export const meta: MetaFunction = () => [
   { charSet: "utf-8" },
-  { title: "OneClickAds — Launch Ads in Seconds with AI" },
+  { title: "Camplete AI — Launch Ads in Seconds with AI" },
   {
     name: "description",
     content:
-      "OneClickAds is the fastest way to generate and publish ads on Google and Meta with AI. No experience needed. Ideal for creators and small businesses.",
+      "Camplete AI is the fastest way to generate and publish ads on Google and Meta with AI. No experience needed. Ideal for creators and small businesses.",
   },
   { name: "viewport", content: "width=device-width,initial-scale=1" },
-  { name: "author", content: "OneClickAds" },
+  { name: "author", content: "Camplete AI" },
   { name: "robots", content: "index, follow" },
   { name: "theme-color", content: "#4f46e5" },
 
   // Open Graph
   {
     property: "og:title",
-    content: "OneClickAds — Launch Ads in Seconds with AI",
+    content: "Camplete AI — Launch Ads in Seconds with AI",
   },
   {
     property: "og:description",
     content:
-      "Generate AI-powered ad campaigns and go live in minutes. OneClickAds is built for creators, solopreneurs, and marketers who need fast, effective results.",
+      "Generate AI-powered ad campaigns and go live in minutes. Camplete AI is built for creators, solopreneurs, and marketers who need fast, effective results.",
   },
-  { property: "og:url", content: "https://www.oneclickads.io/" },
+  { property: "og:url", content: "https://www.Camplete AI.io/" },
   { property: "og:type", content: "website" },
-  { property: "og:site_name", content: "OneClickAds" },
-  { property: "og:image", content: "https://www.oneclickads.io/og-image.png" },
+  { property: "og:site_name", content: "Camplete AI" },
+  { property: "og:image", content: "https://www.Camplete AI.io/og-image.png" },
   { property: "og:image:width", content: "1200" },
   { property: "og:image:height", content: "630" },
 
   { name: "twitter:card", content: "summary_large_image" },
   {
     name: "twitter:title",
-    content: "OneClickAds — Launch Ads in Seconds with AI",
+    content: "Camplete AI — Launch Ads in Seconds with AI",
   },
   {
     name: "twitter:description",
     content:
-      "Create and publish ads using AI. Target audiences. Save time. OneClickAds helps you go from idea to campaign in just a few clicks.",
+      "Create and publish ads using AI. Target audiences. Save time. Camplete AI helps you go from idea to campaign in just a few clicks.",
   },
-  { name: "twitter:image", content: "https://www.oneclickads.io/og-image.png" },
+  { name: "twitter:image", content: "https://www.Camplete AI.io/og-image.png" },
 ];
 
 export const loader: LoaderFunction = (args) => rootAuthLoader(args);

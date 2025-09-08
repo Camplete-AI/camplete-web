@@ -21,7 +21,14 @@ export async function createCampaign(
             budgetSuggestion: generated.budgetSuggestion,
             callToAction: generated.callToAction,
             keywords: generated.suggestedKeywords.join(", "),
+            conversionCategory: generated.conversionCategory, // ✅ adiciona aqui
+            conversionValue: Number(generated.conversionValue) || null,       // ✅ e aqui
+            budget: input.budget,
+            biddingStrategy: input.biddingStrategy,
             status: "DRAFT",
         },
     });
 }
+
+
+

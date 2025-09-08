@@ -6,33 +6,3 @@ export const client = new GoogleAdsApi({
     developer_token: process.env.GOOGLE_DEVELOPER_TOKEN!,
 });
 
-
-export const googleAdsClient = {
-    async createAsset({
-        imageUrl,
-        customerId,
-        token,
-    }: {
-        imageUrl: string;
-        customerId: string;
-        token: string;
-    }) {
-
-        const customer = client.Customer({
-            customer_id: customerId,
-            refresh_token: token,
-        });
-
-        const asset = await customer.assets.create([
-            {
-                name: "Main Image Asset",
-                image_asset: {
-                    data: await fetch(imageUrl).then((r) => r.buffer()),
-                },
-                final_urls: ["https://example.com"],
-            },
-        ]);
-
-        return asset;
-    },
-};

@@ -17,7 +17,7 @@ export default function LoginPage() {
         <div className="max-w-md w-full space-y-6">
           <div className="space-y-2 text-center">
             <h1 className="text-4xl font-bold text-foreground">
-              Welcome to OneClickAds
+              Welcome to Camplete AI
             </h1>
             <p className="text-muted-foreground">
               Launch stunning ad campaigns in seconds. No setup, no experience —

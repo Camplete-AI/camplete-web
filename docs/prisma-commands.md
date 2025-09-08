@@ -2,7 +2,7 @@
 
 ## Setup
 
-- `createdb oneclickads`
+- `createdb Camplete AI`
 - `npx prisma migrate dev --name init --schema=prisma-backend/prisma/schema.prisma`
 - `npx prisma generate --schema=prisma-backend/prisma/schema.prisma`
 

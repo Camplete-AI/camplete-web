@@ -8,12 +8,18 @@ import { Button } from "@/components/ui/button";
 import { generateCampaign } from "@/lib/ai/generate-campaign";
 import { createCampaign } from "@/lib/db/create-campaign";
 import { getAuth } from "@clerk/remix/ssr.server";
+import { BiddingStrategySelector } from "@/components/homepage/build-strategy-selection";
 
 export async function action(args: ActionFunctionArgs) {
   const formData = await args.request.formData();
   const name = String(formData.get("name") || "");
   const description = String(formData.get("description") || "");
   const image = String(formData.get("image") || "");
+  const budgetRaw = formData.get("budget");
+  const budget = budgetRaw ? parseFloat(String(budgetRaw)) : NaN;
+  const biddingStrategy = String(
+    formData.get("biddingStrategy") || "MAXIMIZE_CONVERSIONS"
+  );
 
   const errors: Record<string, string> = {};
 
@@ -33,12 +39,17 @@ export async function action(args: ActionFunctionArgs) {
     return { errors };
   }
 
+  if (isNaN(budget) || budget < 5) {
+    errors.budget = "Budget must be at least R$5.00";
+  }
+
   const { userId } = await getAuth(args);
   if (!userId) throw new Error("Not authenticated");
 
   const generated = await generateCampaign({ name, description });
+
   const campaign = await createCampaign(
-    { name, description, image },
+    { name, description, image, budget, biddingStrategy },
     generated,
     userId
   );
@@ -66,7 +77,21 @@ export default function CreateCampaignPage() {
             <p className="text-red-500 text-sm">{errors.name}</p>
           )}
         </div>
-
+        <div className="space-y-2">
+          <Label htmlFor="budget">Budget (R$)</Label>
+          <Input
+            id="budget"
+            name="budget"
+            type="number"
+            step="0.01"
+            min="5"
+            required
+            placeholder="Ex: 20.00"
+          />
+          {errors?.budget && (
+            <p className="text-red-500 text-sm">{errors.budget}</p>
+          )}
+        </div>
         <div className="space-y-2">
           <Label htmlFor="description">Description</Label>
           <Textarea id="description" name="description" rows={4} required />
@@ -82,6 +107,8 @@ export default function CreateCampaignPage() {
             <p className="text-red-500 text-sm">{errors.image}</p>
           )}
         </div>
+
+        <BiddingStrategySelector />
 
         <Button type="submit" disabled={navigation.state === "submitting"}>
           {navigation.state === "submitting"

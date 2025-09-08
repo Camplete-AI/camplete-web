@@ -11,29 +11,44 @@ model User {
   id                 String    @id @default(cuid())
   email              String    @unique
   name               String?
+  // Google Ads
   googleAccessToken  String?
   googleRefreshToken String?
   googleCustomerId   String?
 
+  // Meta Ads
+  metaAccessToken    String?
+  metaRefreshToken   String?
+  metaAdAccountId    String?
+  metaBusinessId     String?
+  
   campaigns          Campaign[]
   createdAt          DateTime  @default(now())
 }
 
 model Campaign {
-  id               String   @id @default(cuid())
-  userId           String
-  user             User     @relation(fields: [userId], references: [id])
-  name             String
-  description      String
-  image            String?
-  headline         String
-  adDescription    String
-  audience         String
-  objective        String
-  budgetSuggestion String
-  callToAction     String
-  keywords         String
-  status           String   @default("DRAFT")
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id])
+  name               String
+  description        String
+  image              String?
+  headline           String
+  longHeadline       String?
+  adDescription      String
+  audience           String
+  objective          String
+  budgetSuggestion   String?
+  callToAction       String
+  keywords           String
+  conversionCategory String?
+  conversionValue    Float?
+  budget             Float?
+  biddingStrategy    String?
+  businessName       String?
+  youtubeVideoUrl    String?
+  status             String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
+
