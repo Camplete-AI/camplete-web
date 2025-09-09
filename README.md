@@ -28,8 +28,6 @@ POSTGRES_DB=remixdb
 Prisma / Remix connection
 DATABASE_URL=postgresql://remix:remix@db:5432/remixdb
 
-yaml
-Copy code
 
 > ⚠️ Note the host is `db`, which is the name of the Postgres service in `docker-compose.yml`.
 
@@ -41,9 +39,6 @@ Start everything (app + database) in development mode:
 
 npm run docker:up
 
-less
-Copy code
-
 - The Remix dev server will run inside Docker at  
   [http://localhost:5173](http://localhost:5173) (hot-reload enabled).  
 - Postgres will be available at `localhost:5434`.  
@@ -51,9 +46,6 @@ Copy code
 Stop everything and remove volumes/containers:
 
 npm run docker:down
-
-yaml
-Copy code
 
 ---
 
@@ -63,24 +55,15 @@ All Prisma commands are already wrapped with Docker Compose:
 
 - Run migrations:
 
-npm run db:migrate
-
-diff
-Copy code
+`npm run db:migrate`
 
 - Generate Prisma client:
 
-npm run db:generate
-
-diff
-Copy code
+`npm run db:generate`
 
 - Open Prisma Studio:
 
-npm run db:studio
-
-yaml
-Copy code
+`npm run db:studio`
 
 ---
 
@@ -89,9 +72,6 @@ Copy code
 To build and run in production mode:
 
 NODE_ENV=production npm run docker:up
-
-markdown
-Copy code
 
 - The Remix app will build and run on port `3000`  
   → [http://localhost:3000](http://localhost:3000)  
@@ -121,5 +101,3 @@ Copy code
 - Postgres: `localhost:5434`  
 - Database URL inside app:  
 postgresql://remix:remix@db:5432/remixdb
-
-Copy code
