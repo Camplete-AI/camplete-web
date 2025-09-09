@@ -37,7 +37,7 @@ DATABASE_URL=postgresql://remix:remix@db:5432/remixdb
 
 Start everything (app + database) in development mode:
 
-npm run docker:up
+`npm run docker:up`
 
 - The Remix dev server will run inside Docker at  
   [http://localhost:5173](http://localhost:5173) (hot-reload enabled).  
@@ -45,7 +45,7 @@ npm run docker:up
 
 Stop everything and remove volumes/containers:
 
-npm run docker:down
+`npm run docker:down`
 
 ---
 
