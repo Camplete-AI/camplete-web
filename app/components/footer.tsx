@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   Shield,
   ExternalLink,
@@ -31,7 +30,7 @@ const Footer = () => {
               their revenue.
             </p>
             <Button size="lg" className="text-lg px-8 py-6 glow-on-hover">
-              👉 Start Free Now
+              <a href="/dashboard"> 👉 Start Free Now</a>
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </div>

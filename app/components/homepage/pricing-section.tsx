@@ -73,7 +73,7 @@ const PricingSection = () => {
               </ul>
 
               <Button className="w-full" size="lg">
-                Get Started Now
+                <a href="/dashboard">Get Started Now</a>
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
 

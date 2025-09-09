@@ -53,10 +53,10 @@ const Navigation = () => {
 
         <div className="flex items-center space-x-4">
           <Button variant="ghost" size="sm">
-            Sign In
+            <a href="/dashboard">Sign In</a>
           </Button>
           <Button size="sm" className="glow-on-hover">
-            Get Started
+            <a href="/dashboard">Get Started</a>
           </Button>
         </div>
       </div>

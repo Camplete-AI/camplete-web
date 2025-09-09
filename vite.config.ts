@@ -11,4 +11,7 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  build: {
+    sourcemap: process.env.NODE_ENV !== "production",
+  },
 });
