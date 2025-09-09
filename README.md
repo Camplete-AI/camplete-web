@@ -1,38 +1,125 @@
-# Welcome to Remix!
+# Welcome to Remix with Docker + Postgres
 
-- [Remix Docs](https://remix.run/docs)
+This project is configured to run **Remix + Postgres** entirely inside Docker, both in development and production.  
+You don’t need to install Node.js or Postgres locally — everything runs in containers.
+
+---
+
+## Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+---
+
+## Environment variables
+
+Create a `.env` file in the root of the project with:
+
+App
+NODE_ENV=development
+PORT=3000
+
+Database
+POSTGRES_USER=remix
+POSTGRES_PASSWORD=remix
+POSTGRES_DB=remixdb
+
+Prisma / Remix connection
+DATABASE_URL=postgresql://remix:remix@db:5432/remixdb
+
+yaml
+Copy code
+
+> ⚠️ Note the host is `db`, which is the name of the Postgres service in `docker-compose.yml`.
+
+---
 
 ## Development
 
-From your terminal:
+Start everything (app + database) in development mode:
 
-```sh
-npm run dev
-```
+npm run docker:up
 
-This starts your app in development mode, rebuilding assets on file changes.
+less
+Copy code
 
-## Deployment
+- The Remix dev server will run inside Docker at  
+  [http://localhost:5173](http://localhost:5173) (hot-reload enabled).  
+- Postgres will be available at `localhost:5434`.  
 
-First, build your app for production:
+Stop everything and remove volumes/containers:
 
-```sh
-npm run build
-```
+npm run docker:down
 
-Then run the app in production mode:
+yaml
+Copy code
 
-```sh
-npm start
-```
+---
 
-Now you'll need to pick a host to deploy it to.
+## Database commands
 
-### DIY
+All Prisma commands are already wrapped with Docker Compose:
 
-If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
+- Run migrations:
 
-Make sure to deploy the output of `remix build`
+npm run db:migrate
 
-- `build/server`
-- `build/client`
+diff
+Copy code
+
+- Generate Prisma client:
+
+npm run db:generate
+
+diff
+Copy code
+
+- Open Prisma Studio:
+
+npm run db:studio
+
+yaml
+Copy code
+
+---
+
+## Production
+
+To build and run in production mode:
+
+NODE_ENV=production npm run docker:up
+
+markdown
+Copy code
+
+- The Remix app will build and run on port `3000`  
+  → [http://localhost:3000](http://localhost:3000)  
+- Postgres stays on `localhost:5434`.
+
+---
+
+## How it works
+
+- **Dockerfile**:  
+  - Uses Node.js 20  
+  - Installs dependencies  
+  - Runs `prisma generate`  
+  - In **production**, it builds Remix and runs `npm start` on port `3000`.  
+  - In **development**, it runs `npm run dev` on port `5173`.
+
+- **docker-compose.yml**:  
+  - **db**: Postgres 14 with persistent volume  
+  - **app**: Remix application, mapped with volumes for hot reload in dev, connected to the database  
+
+---
+
+## Quick reference
+
+- Dev app: [http://localhost:5173](http://localhost:5173)  
+- Prod app: [http://localhost:3000](http://localhost:3000)  
+- Postgres: `localhost:5434`  
+- Database URL inside app:  
+postgresql://remix:remix@db:5432/remixdb
+
+Copy code
