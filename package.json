@@ -6,12 +6,14 @@
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
-    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve build/server/index.js",
     "typecheck": "tsc",
-    "prisma:studio": "prisma studio --schema=prisma-backend/prisma/schema.prisma",
-    "prisma:migrate": "prisma migrate dev --name init --schema=prisma-backend/prisma/schema.prisma",
-    "prisma:generate": "prisma generate --schema=prisma-backend/prisma/schema.prisma"
+    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+    "docker:up": "docker compose --env-file .env up --build",
+    "docker:down": "docker compose --env-file .env down --volumes --remove-orphans",
+    "db:migrate": "docker compose exec app npx prisma migrate dev --schema=prisma-backend/prisma/schema.prisma",
+    "db:generate": "docker compose exec app npx prisma generate --schema=prisma-backend/prisma/schema.prisma",
+    "db:studio": "docker compose exec app npx prisma studio --schema=prisma-backend/prisma/schema.prisma"
   },
   "dependencies": {
     "@clerk/remix": "^4.10.4",
@@ -41,6 +43,7 @@
     "prisma": "^6.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "recharts": "^3.2.0",
     "sort-by": "^1.2.0",
     "stripe": "^18.3.0",
     "tailwind-merge": "^3.3.1",

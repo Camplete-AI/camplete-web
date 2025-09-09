@@ -13,7 +13,7 @@ const steps = [
   {
     step: 1,
     icon: LogIn,
-    title: "Sign up with Clerk",
+    title: "Sign up",
     description: "Create your account in seconds with secure authentication",
     color: "bg-blue-50 text-blue-600",
   },

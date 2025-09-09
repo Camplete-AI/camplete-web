@@ -49,7 +49,7 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
         </Button>
       </header>
 
-      <main className="flex-1">{children}</main>
+      <main className="flex-1  bg-muted/30">{children}</main>
 
       <footer className="w-full px-6 py-4 border-t border-border text-sm text-muted-foreground text-center">
         Made with ❤️ by Camplete AI ·{" "}

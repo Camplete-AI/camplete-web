@@ -15,7 +15,7 @@ export default function MainLayout({
           <BaseLayout>
             <div className="p-4">
               <SidebarTrigger />
-              <div className="flex-1 p-4">{children}</div>
+              <div className="flex-1 p-4 ">{children}</div>
             </div>
           </BaseLayout>
         </div>

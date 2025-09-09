@@ -12,7 +12,7 @@ import {
 
 const roadmapItems = [
   {
-    quarter: "Q1 2024",
+    quarter: "Q1 2025",
     status: "In Development",
     title: "Pro Subscription Plans",
     description: "Monthly plans with unlimited campaigns and advanced features",
@@ -22,7 +22,7 @@ const roadmapItems = [
     isActive: true,
   },
   {
-    quarter: "Q2 2024",
+    quarter: "Q2 2025",
     status: "Planned",
     title: "Multi-Account Management",
     description:
@@ -32,7 +32,7 @@ const roadmapItems = [
     color: "bg-purple-500",
   },
   {
-    quarter: "Q3 2024",
+    quarter: "Q3 2025",
     status: "Planned",
     title: "Enterprise Features",
     description: "Advanced reporting and integrations for larger organizations",
@@ -41,7 +41,7 @@ const roadmapItems = [
     color: "bg-green-500",
   },
   {
-    quarter: "Q4 2024",
+    quarter: "Q4 2025",
     status: "Research",
     title: "Advanced AI Optimization",
     description: "Real-time campaign optimization and predictive analytics",

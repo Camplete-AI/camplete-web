@@ -93,7 +93,7 @@ const PricingSection = () => {
               <div className="text-center mb-8">
                 <h3 className="text-2xl font-semibold mb-2">Pro Plans</h3>
                 <div className="text-5xl font-display font-normal text-muted-foreground mb-2">
-                  2024
+                  2025
                 </div>
                 <p className="text-muted-foreground">
                   multiple pricing options

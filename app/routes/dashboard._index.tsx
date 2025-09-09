@@ -2,12 +2,33 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, MousePointer, Eye, DollarSign, Users } from "lucide-react";
+import {
+  ArrowRight,
+  MousePointer,
+  Eye,
+  DollarSign,
+  Users,
+  PlugZap,
+  UnplugIcon,
+} from "lucide-react";
 import { Link, useLoaderData } from "@remix-run/react";
 
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { getAuth } from "@clerk/remix/ssr.server";
 import { prisma } from "prisma-backend/app/lib/prisma";
+
+// 🔑 importa componentes do recharts
+import {
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  BarChart,
+  Bar,
+  ResponsiveContainer,
+} from "recharts";
 
 export async function loader(args: LoaderFunctionArgs) {
   const { userId } = await getAuth(args);
@@ -57,8 +78,22 @@ export default function DashboardHome() {
     },
   ];
 
+  // Mock de dados para os gráficos
+  const lineData = [
+    { name: "Mon", clicks: 120, impressions: 400 },
+    { name: "Tue", clicks: 200, impressions: 600 },
+    { name: "Wed", clicks: 150, impressions: 450 },
+    { name: "Thu", clicks: 300, impressions: 800 },
+    { name: "Fri", clicks: 250, impressions: 700 },
+  ];
+
+  const barData = [
+    { name: "Google Ads", spend: 240 },
+    { name: "Meta Ads", spend: 180 },
+  ];
+
   return (
-    <div className="min-h-screen bg-muted/30 p-6">
+    <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div>
@@ -104,19 +139,75 @@ export default function DashboardHome() {
           })}
         </div>
 
+        {/* Charts Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card className="shadow-soft">
+            <CardHeader>
+              <CardTitle>Performance Overview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={lineData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="clicks"
+                    stroke="#6B4EFF"
+                    strokeWidth={2}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="impressions"
+                    stroke="#FF6B6B"
+                    strokeWidth={2}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-soft">
+            <CardHeader>
+              <CardTitle>Spend by Platform</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={barData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="spend" fill="#6B4EFF" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Connected Accounts */}
-        <Card className="shadow-soft">
+        <Card className="shadow-card border border-border">
           <CardHeader>
-            <CardTitle>Connected Accounts</CardTitle>
+            <CardTitle className="text-lg font-semibold text-foreground">
+              Connected Accounts
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Link your ad accounts to unlock AI-powered campaigns.
+            </p>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors">
-              <div className="flex items-center space-x-4">
+          <CardContent className="space-y-6">
+            {/* Google Ads */}
+            <div className="flex items-center justify-between p-4 rounded-lg border bg-background hover:bg-muted/40 transition-colors">
+              <div className="flex items-center space-x-3">
                 <p className="font-medium">Google Ads</p>
                 <Badge
-                  variant={googleConnected ? "default" : "secondary"}
+                  variant="outline"
                   className={
-                    googleConnected ? "bg-coral hover:bg-coral/80" : ""
+                    googleConnected
+                      ? "bg-green-100 text-green-700 border-green-200"
+                      : "bg-red-100 text-red-700 border-red-200"
                   }
                 >
                   {googleConnected ? "Connected" : "Disconnected"}
@@ -124,39 +215,64 @@ export default function DashboardHome() {
               </div>
               {googleConnected ? (
                 <form action="/auth/google/disconnect" method="post">
-                  <Button type="submit" variant="destructive" size="sm">
-                    Disconnect
+                  <Button
+                    type="submit"
+                    variant="destructive"
+                    size="sm"
+                    className="flex items-center gap-1"
+                  >
+                    <UnplugIcon className="w-4 h-4" /> Disconnect
                   </Button>
                 </form>
               ) : (
                 <form action="/auth/google/connect" method="get">
-                  <Button type="submit" variant="outline" size="sm">
-                    Connect
+                  <Button
+                    type="submit"
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-1 text-blue-600 border-blue-300"
+                  >
+                    <PlugZap className="w-4 h-4" /> Connect
                   </Button>
                 </form>
               )}
             </div>
 
-            <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors">
-              <div className="flex items-center space-x-4">
+            {/* Meta Ads */}
+            <div className="flex items-center justify-between p-4 rounded-lg border bg-background hover:bg-muted/40 transition-colors">
+              <div className="flex items-center space-x-3">
                 <p className="font-medium">Meta Ads</p>
                 <Badge
-                  variant={metaConnected ? "default" : "secondary"}
-                  className={metaConnected ? "bg-coral hover:bg-coral/80" : ""}
+                  variant="outline"
+                  className={
+                    metaConnected
+                      ? "bg-green-100 text-green-700 border-green-200"
+                      : "bg-red-100 text-red-700 border-red-200"
+                  }
                 >
                   {metaConnected ? "Connected" : "Disconnected"}
                 </Badge>
               </div>
               {metaConnected ? (
                 <form action="/auth/meta/disconnect" method="post">
-                  <Button type="submit" variant="destructive" size="sm">
-                    Disconnect
+                  <Button
+                    type="submit"
+                    variant="destructive"
+                    size="sm"
+                    className="flex items-center gap-1"
+                  >
+                    <UnplugIcon className="w-4 h-4" /> Disconnect
                   </Button>
                 </form>
               ) : (
                 <form action="/auth/meta/connect" method="get">
-                  <Button type="submit" variant="outline" size="sm">
-                    Connect
+                  <Button
+                    type="submit"
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-1 text-indigo-600 border-indigo-300"
+                  >
+                    <PlugZap className="w-4 h-4" /> Connect
                   </Button>
                 </form>
               )}

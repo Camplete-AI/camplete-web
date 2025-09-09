@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play, Zap } from "lucide-react";
-
+import Platform from "../../../public/platform-mockup.png";
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen bg-gradient-hero flex items-center justify-center overflow-hidden">
@@ -66,7 +66,7 @@ const HeroSection = () => {
           <div className="relative fade-in-right">
             <div className="relative">
               <img
-                src="https://i.ytimg.com/vi/dEsUoltLK78/maxresdefault.jpg"
+                src={Platform}
                 alt="Camplete AI Dashboard"
                 className="w-full rounded-2xl shadow-elegant float"
               />
