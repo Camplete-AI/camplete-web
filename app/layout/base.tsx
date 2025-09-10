@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { useUser, UserButton } from "@clerk/remix";
 import { Button } from "@/components/ui/button";
 
@@ -7,25 +7,22 @@ interface BaseLayoutProps {
 }
 
 export default function BaseLayout({ children }: BaseLayoutProps) {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
   const { user, isSignedIn } = useUser();
 
   useEffect(() => {
-    const stored = localStorage.getItem("theme") as "light" | "dark" | null;
-    if (stored === "dark") {
-      document.documentElement.classList.add("dark");
-      setTheme("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      setTheme("light");
-    }
+    const stored = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    const theme = stored ?? (prefersDark ? "dark" : "light");
+    document.documentElement.classList.toggle("dark", theme === "dark");
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
+    const isDark = document.documentElement.classList.contains("dark");
+    const newTheme = isDark ? "light" : "dark";
     document.documentElement.classList.toggle("dark", newTheme === "dark");
+    localStorage.setItem("theme", newTheme);
   };
 
   return (
@@ -45,11 +42,11 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
         </div>
 
         <Button variant="ghost" size="sm" onClick={toggleTheme}>
-          {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
+          Toggle Theme
         </Button>
       </header>
 
-      <main className="flex-1  bg-muted/30">{children}</main>
+      <main className="flex-1 bg-muted/30">{children}</main>
 
       <footer className="w-full px-6 py-4 border-t border-border text-sm text-muted-foreground text-center">
         Made with ❤️ by Camplete AI ·{" "}
