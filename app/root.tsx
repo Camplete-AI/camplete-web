@@ -10,6 +10,7 @@ import {
 import { LinksFunction } from "@remix-run/node";
 import styles from "./tailwind.css?url";
 import { rootAuthLoader } from "@clerk/remix/ssr.server";
+import { ThemeHydrate } from "./stores/theme-hydrate";
 
 export const links: LinksFunction = () => [
   {
@@ -84,8 +85,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+        (function() {
+          try {
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDark) {
+              document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+            }
+          } catch (_) {}
+        })();
+      `,
+          }}
+        />
       </head>
       <body>
+        <ThemeHydrate />
         {children}
         <ScrollRestoration />
         <Scripts />

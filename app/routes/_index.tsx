@@ -1,4 +1,4 @@
-import Navigation from "@/components/navigation-header";
+import Navigation from "@/components/homepage/navigation-header";
 import HeroSection from "@/components/homepage/hero-section";
 import ProblemSection from "@/components/homepage/problem-section";
 import SolutionSection from "@/components/homepage/solution-section";
