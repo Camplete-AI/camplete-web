@@ -1,6 +1,8 @@
 import { ReactNode, useEffect } from "react";
 import { useUser, UserButton } from "@clerk/remix";
 import { Button } from "@/components/ui/button";
+import { Moon, Sun } from "lucide-react";
+import { useThemeStore } from "@/stores/use-theme-store";
 
 interface BaseLayoutProps {
   readonly children: ReactNode;
@@ -8,22 +10,14 @@ interface BaseLayoutProps {
 
 export default function BaseLayout({ children }: BaseLayoutProps) {
   const { user, isSignedIn } = useUser();
+  const { theme, setTheme, toggleTheme } = useThemeStore();
 
   useEffect(() => {
-    const stored = localStorage.getItem("theme");
     const prefersDark = window.matchMedia(
       "(prefers-color-scheme: dark)"
     ).matches;
-    const theme = stored ?? (prefersDark ? "dark" : "light");
-    document.documentElement.classList.toggle("dark", theme === "dark");
-  }, []);
-
-  const toggleTheme = () => {
-    const isDark = document.documentElement.classList.contains("dark");
-    const newTheme = isDark ? "light" : "dark";
-    document.documentElement.classList.toggle("dark", newTheme === "dark");
-    localStorage.setItem("theme", newTheme);
-  };
+    setTheme(prefersDark ? "dark" : "light");
+  }, [setTheme]);
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground transition-colors">
@@ -41,8 +35,17 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
           )}
         </div>
 
-        <Button variant="ghost" size="sm" onClick={toggleTheme}>
-          Toggle Theme
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleTheme}
+          aria-label="Toggle Theme"
+        >
+          {theme === "dark" ? (
+            <Sun className="h-5 w-5" />
+          ) : (
+            <Moon className="h-5 w-5" />
+          )}
         </Button>
       </header>
 
