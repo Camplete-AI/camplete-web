@@ -1,4 +1,5 @@
-import { redirect, createCookie } from "@remix-run/node";
+import { redirect, createCookie, LoaderFunctionArgs } from "@remix-run/node";
+import { getAuth } from "@clerk/remix/ssr.server";
 import crypto from "crypto";
 
 export const metaStateCookie = createCookie("meta_oauth_state", {
@@ -8,7 +9,10 @@ export const metaStateCookie = createCookie("meta_oauth_state", {
     maxAge: 300, // 5 min
 });
 
-export async function loader() {
+export async function loader(args: LoaderFunctionArgs) {
+    const { userId } = await getAuth(args);
+    if (!userId) return redirect("/sign-in");
+
     const state = crypto.randomUUID();
     const clientId = process.env.META_CLIENT_ID!;
     const redirectUri = process.env.META_REDIRECT_URI!;
@@ -21,9 +25,11 @@ export async function loader() {
     oauthUrl.searchParams.set("response_type", "code");
     oauthUrl.searchParams.set("state", state);
 
+    const cookieValue = JSON.stringify({ state, userId });
+
     return redirect(oauthUrl.toString(), {
         headers: {
-            "Set-Cookie": await metaStateCookie.serialize(state),
+            "Set-Cookie": await metaStateCookie.serialize(cookieValue),
         },
     });
 }

@@ -9,30 +9,28 @@ datasource db {
 }
 
 model User {
-  id                 String    @id @default(cuid())
-  email              String    @unique
+  id                 String      @id @default(cuid())
+  email              String      @unique
   name               String?
-
-  // Google Ads
   googleAccessToken  String?
   googleRefreshToken String?
   googleCustomerId   String?
-
-  // Meta Ads
   metaAccessToken    String?
   metaRefreshToken   String?
   metaAdAccountId    String?
   metaBusinessId     String?
-  
+  metaPageId         String?  
   campaigns          Campaign[]
-  createdAt          DateTime  @default(now())
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime?   @updatedAt
 }
 
 model Campaign {
-  id                 String   @id @default(cuid())
+  id                 String        @id @default(cuid())
   userId             String
-  user               User     @relation(fields: [userId], references: [id])
+  user               User          @relation(fields: [userId], references: [id])
 
+  // ===== General Info =====
   name               String
   description        String
   image              String?
@@ -50,8 +48,29 @@ model Campaign {
   biddingStrategy    String?
   businessName       String?
   youtubeVideoUrl    String?
-  status             String
+  status             String      @default("DRAFT")
+  placements         Json?
 
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  // ===== Relations =====
+  google             GoogleCampaign?
+  meta               MetaCampaign?
+
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime?   @updatedAt
+}
+
+model GoogleCampaign {
+  id             String    @id @default(cuid())
+  campaignId     String    @unique
+  budgetId       String?
+  campaign       Campaign  @relation(fields: [campaignId], references: [id])
+}
+
+model MetaCampaign {
+  id                  String    @id @default(cuid())
+  campaignId          String    @unique
+  adSetId             String?
+  adId                String?
+  specialAdCategories String    @default("NONE")
+  campaign            Campaign  @relation(fields: [campaignId], references: [id])
 }

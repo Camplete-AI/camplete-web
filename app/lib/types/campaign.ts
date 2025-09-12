@@ -4,7 +4,11 @@ export type CampaignInput = {
     image?: string;
     budget?: number;
     biddingStrategy?: string;
+    specialAdCategories?: string;
+    googleCampaignId?: string;
+    googleBudgetId?: string;
 };
+
 
 export enum ConversionActionCategory {
     UNSPECIFIED = "UNSPECIFIED",
@@ -34,6 +38,7 @@ export enum ConversionActionCategory {
 
 export type GeneratedCampaignData = {
     headline: string;
+    longHeadline?: string;
     description: string;
     targetAudience: string;
     objective: string;
@@ -42,4 +47,7 @@ export type GeneratedCampaignData = {
     suggestedKeywords: string[];
     conversionCategory: ConversionActionCategory;
     conversionValue: number;
+    businessName?: string;
+    youtubeVideoUrl?: string;
 };
+
